@@ -5,25 +5,7 @@ import (
 	"net/http"
 )
 
-var corsDomains = []string{
-	"http://app.cestc-yd.cn:18080",
-	// 线上
-	"http://39.101.130.183:18080",
-	"https://39.101.130.183:18080",
-	"http://web.cestc-yd.cn",
-	"https://web.cestc-yd.cn",
-	"https://webcec.cestc-yd.cn",
-
-	// 测试
-	"http://39.101.130.183:18090",
-	"https://39.101.130.183:18090",
-	"http://testweb.cestc-yd.cn",
-	"https://testweb.cestc-yd.cn",
-	"https://testwebcec.cestc-yd.cn",
-
-	// 开发环境
-	"http://47.92.30.21",
-}
+var corsDomains []string
 
 // 跨域
 func crossDomain() gin.HandlerFunc {
