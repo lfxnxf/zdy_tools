@@ -87,10 +87,17 @@ func (s *HttpServer) StartHttps() error {
 	return err
 }
 
-func (s *HttpServer) Shutdown() {
-	err := s.server.Shutdown(context.Background())
+func (s *HttpServer) Shutdown(ctx context.Context) {
+	err := s.server.Shutdown(ctx)
 	if err != nil {
 		fmt.Println(err)
+	}
+
+	if s.httpsServer != nil {
+		err = s.httpsServer.Shutdown(ctx)
+		if err != nil {
+			fmt.Println(err)
+		}
 	}
 }
 
