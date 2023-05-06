@@ -1,0 +1,9 @@
+[server]
+    service_name="api"
+    port = 10000
+    mode = "debug"
+
+[log]
+    succ_stat_code=[]
+    rotate="day"
+    storage_day=7
