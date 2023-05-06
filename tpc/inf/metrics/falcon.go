@@ -3,6 +3,7 @@ package metrics
 import (
 	"bytes"
 	"fmt"
+	"github.com/rcrowley/go-metrics"
 	"log"
 	"net/http"
 	"os"
