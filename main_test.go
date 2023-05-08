@@ -3,6 +3,8 @@ package zdy_tools
 import (
 	"github.com/gin-gonic/gin"
 	"github.com/lfxnxf/zdy_tools/inits"
+	"github.com/lfxnxf/zdy_tools/zd_error"
+	"github.com/lfxnxf/zdy_tools/zd_http"
 	"github.com/lfxnxf/zdy_tools/zd_http/server"
 	"net/http"
 	"testing"
@@ -24,14 +26,10 @@ func Test_Main(t *testing.T) {
 	})
 
 	s.GET("/test", func(c *gin.Context) {
-		c.JSON(200, map[string]string{
-			"hello": "word",
-		})
+		zd_http.WriteJson(c, map[int]string{1: "word"}, zd_error.AddError("test error", "error"))
 	})
 
-	go func() {
-		if err := s.StartHttp(); err != nil && err != http.ErrServerClosed {
-			panic(err)
-		}
-	}()
+	if err := s.StartHttp(); err != nil && err != http.ErrServerClosed {
+		panic(err)
+	}
 }

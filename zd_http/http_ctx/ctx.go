@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"github.com/gin-gonic/gin"
 	"github.com/go-playground/validator/v10"
+	"github.com/lfxnxf/zdy_tools/trace"
 	"github.com/lfxnxf/zdy_tools/zd_error"
 	"net/http"
 	"reflect"
@@ -13,21 +14,23 @@ import (
 type HttpHandler func(ctx *HttpContext)
 
 type WrapResp struct {
-	Code int         `json:"error"`
-	Msg  string      `json:"msg"`
-	Data interface{} `json:"data"`
+	Code      string      `json:"code"`
+	Msg       string      `json:"message"`
+	Data      interface{} `json:"data"`
+	RequestId string      `json:"request_id"`
 }
 
 const (
 	RespKey = "response_data"
 )
 
-func NewWrapResp(data interface{}, err error) WrapResp {
+func NewWrapResp(data interface{}, err error, traceId string) WrapResp {
 	var e = zd_error.Cause(err)
 	return WrapResp{
-		Code: e.Code(),
-		Msg:  e.Message(),
-		Data: data,
+		Code:      e.Code(),
+		Msg:       e.Message(),
+		Data:      data,
+		RequestId: traceId,
 	}
 }
 
@@ -36,8 +39,8 @@ type HttpContext struct {
 }
 
 func (c *HttpContext) WriteJson(data interface{}, err error) {
-	w := NewWrapResp(data, err)
-	if w.Code != 0 {
+	w := NewWrapResp(data, err, trace.ExtraTraceID(c))
+	if w.Code != "" {
 		c.JSON(http.StatusInternalServerError, w)
 	} else {
 		c.JSON(http.StatusOK, w)

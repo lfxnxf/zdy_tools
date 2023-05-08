@@ -3,29 +3,33 @@ package zd_http
 import (
 	"fmt"
 	"github.com/gin-gonic/gin"
+	"github.com/go-playground/validator/v10"
+	"github.com/lfxnxf/zdy_tools/trace"
 	"github.com/lfxnxf/zdy_tools/zd_error"
 	"net/http"
 	"reflect"
 )
 
 type WrapResp struct {
-	Code int         `json:"error"`
-	Msg  string      `json:"msg"`
-	Data interface{} `json:"data"`
+	Code      string      `json:"code"`
+	Msg       string      `json:"message"`
+	Data      interface{} `json:"data"`
+	RequestId string      `json:"request_id"`
 }
 
-func newWrapResp(data interface{}, err error) WrapResp {
+func newWrapResp(data interface{}, err error, traceId string) WrapResp {
 	var e = zd_error.Cause(err)
 	return WrapResp{
-		Code: e.Code(),
-		Msg:  e.Message(),
-		Data: data,
+		Code:      e.Code(),
+		Msg:       e.Message(),
+		Data:      data,
+		RequestId: traceId,
 	}
 }
 
 func WriteJson(c *gin.Context, data interface{}, err error) {
-	w := newWrapResp(data, err)
-	if w.Code != 0 {
+	w := newWrapResp(data, err, trace.ExtraTraceID(c))
+	if len(w.Code) > 0 {
 		c.JSON(http.StatusInternalServerError, w)
 	} else {
 		c.JSON(http.StatusOK, w)

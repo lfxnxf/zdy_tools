@@ -1,14 +1,14 @@
 package zd_error
 
 var (
-	ParamsErrorCode = 499
-	Success         = genError(0, "success")
-	ServerError     = genError(500, "内部系统错误")
+	ParamsErrorCode = "params error"
+	Success         = genError("Success", "success")
+	ServerError     = genError("server error", "内部系统错误")
 	ParamsError     = genError(ParamsErrorCode, "参数错误")
-	SignError       = genError(501, "签名错误")
+	SignError       = genError("sign error", "签名错误")
 )
 
-// 重定义错误码，以便增加新的支持
+// ErrorCode 重定义错误码，以便增加新的支持
 type ErrorCode struct {
 	code Code
 	err  error
@@ -23,7 +23,7 @@ func (c ErrorCode) Error() string {
 }
 
 // Code return error code
-func (c ErrorCode) Code() int {
+func (c ErrorCode) Code() string {
 	return c.code.Code()
 }
 
@@ -37,14 +37,14 @@ func (c ErrorCode) Equal(err error) bool {
 	return c.code.Equal(err)
 }
 
-func genError(code int, msg string) ErrorCode {
+func genError(code string, msg string) ErrorCode {
 	return ErrorCode{
 		code: Error(code, msg),
 	}
 }
 
-// 添加错误码，不可重复添加同一错误码
-func AddError(code int, msg string) ErrorCode {
+// AddError 添加错误码
+func AddError(code string, msg string) ErrorCode {
 	return genError(code, msg)
 }
 
