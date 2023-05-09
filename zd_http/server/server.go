@@ -80,7 +80,7 @@ func (s *HttpServer) StartHttps() error {
 		WriteTimeout:   90 * time.Second,
 		MaxHeaderBytes: 1 << 20,
 	}
-	err := s.server.ListenAndServeTLS(s.cfg.Crt, s.cfg.Key)
+	err := s.httpsServer.ListenAndServeTLS(s.cfg.Crt, s.cfg.Key)
 	if err != nil {
 		logging.Errorw("start http server failed %v", zap.Error(err))
 	}
