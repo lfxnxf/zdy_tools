@@ -17,7 +17,7 @@ type WrapResp struct {
 	Code      string      `json:"code"`
 	Msg       string      `json:"message"`
 	Data      interface{} `json:"data"`
-	RequestId string      `json:"request_id"`
+	RequestId string      `json:"requestId"`
 }
 
 const (
