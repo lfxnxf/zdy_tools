@@ -11,37 +11,37 @@ import (
 )
 
 type Instance interface {
-	GetBase() Config
+	SetBase(Config)
 }
 
 type Config struct {
-	Log           Log                        `toml:"log"`
-	Server        server.HttpServerConfig    `toml:"server"`
-	RpcServer     rpc_server.RpcServerConfig `toml:"rpc_server"`
-	RpcClient     []rpc_client.RpcClientConf `toml:"rpc_client"`
-	Telemetry     trace.Config               `toml:"telemetry"`
-	Database      []sql.GroupConfig          `toml:"database"`
-	Redis         []redis.Conf               `toml:"redis"`
-	KafkaProducer []kafka.ProducerConfig     `toml:"kafka_producer_client"`
-	KafkaConsumer []kafka.ConsumeConfig      `toml:"kafka_consume"`
+	Log           Log                        `yaml:"log"`
+	Server        server.HttpServerConfig    `yaml:"server"`
+	RpcServer     rpc_server.RpcServerConfig `yaml:"rpc_server"`
+	RpcClient     []rpc_client.RpcClientConf `yaml:"rpc_client"`
+	Telemetry     trace.Config               `yaml:"telemetry"`
+	Database      []sql.GroupConfig          `yaml:"mysql"`
+	Redis         []redis.Conf               `yaml:"redis"`
+	KafkaProducer []kafka.ProducerConfig     `yaml:"kafka_producer_client"`
+	KafkaConsumer []kafka.ConsumeConfig      `yaml:"kafka_consume"`
 }
 
 type Log struct {
-	Level              string `toml:"level"`
-	Rotate             string `toml:"rotate"`
-	AccessRotate       string `toml:"access_rotate"`
-	AccessLog          string `toml:"access_log"`
-	BusinessLog        string `toml:"business_log"`
-	ServerLog          string `toml:"server_log"`
-	StatLog            string `toml:"stat_log"`
-	ErrorLog           string `toml:"err_log"`
-	LogPath            string `toml:"log_path"`
-	BalanceLogLevel    string `toml:"balance_log_level"`
-	GenLogLevel        string `toml:"gen_log_level"`
-	AccessLogOff       bool   `toml:"access_log_off"`
-	BusinessLogOff     bool   `toml:"business_log_off"`
-	RequestBodyLogOff  bool   `toml:"request_log_off"`
-	RespBodyLogMaxSize int    `toml:"response_log_max_size"` // -1:不限制;默认1024字节;
-	SuccessStatCode    []int  `toml:"success_stat_code"`
-	StorageDay         int64  `toml:"storage_day"` // 日志保留时间
+	Level              string `yaml:"level"`
+	Rotate             string `yaml:"rotate"`
+	AccessRotate       string `yaml:"access_rotate"`
+	AccessLog          string `yaml:"access_log"`
+	BusinessLog        string `yaml:"business_log"`
+	ServerLog          string `yaml:"server_log"`
+	StatLog            string `yaml:"stat_log"`
+	ErrorLog           string `yaml:"err_log"`
+	LogPath            string `yaml:"log_path"`
+	BalanceLogLevel    string `yaml:"balance_log_level"`
+	GenLogLevel        string `yaml:"gen_log_level"`
+	AccessLogOff       bool   `yaml:"access_log_off"`
+	BusinessLogOff     bool   `yaml:"business_log_off"`
+	RequestBodyLogOff  bool   `yaml:"request_log_off"`
+	RespBodyLogMaxSize int    `yaml:"response_log_max_size"` // -1:不限制;默认1024字节;
+	SuccessStatCode    []int  `yaml:"success_stat_code"`
+	StorageDay         int64  `yaml:"storage_day"` // 日志保留时间
 }

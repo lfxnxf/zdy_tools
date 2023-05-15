@@ -14,21 +14,21 @@ var (
 type (
 	// A RedisConf is a redis config.
 	Conf struct {
-		Name         string   `toml:"name"`
-		Host         string   `toml:"host"`      // node时传
-		AddrList     []string `toml:"addr_list"` // cluster时传
-		Pass         string   `toml:"pass"`
-		MinIdle      int      `toml:"min_idle"`
-		Database     int      `toml:"database"`
-		MaxRetries   int      `toml:"max_retries"`
-		DialTimeout  int      `toml:"dial_timeout"`
-		ReadTimeout  int      `toml:"read_timeout"`
-		WriteTimeout int      `toml:"write_timeout"`
-		PoolSize     int      `toml:"pool_size"`
-		PoolTimeout  int      `toml:"pool_timeout"`
-		IdleTimeout  int      `toml:"idle_timeout"`
-		Type         string   `toml:"type"`
-		Tls          bool     `toml:"tls"`
+		Name         string   `yaml:"name"`
+		Host         string   `yaml:"host"`      // node时传
+		AddrList     []string `yaml:"addr_list"` // cluster时传
+		Pass         string   `yaml:"pass"`
+		MinIdle      int      `yaml:"min_idle"`
+		Database     int      `yaml:"database"`
+		MaxRetries   int      `yaml:"max_retries"`
+		DialTimeout  int      `yaml:"dial_timeout"`
+		ReadTimeout  int      `yaml:"read_timeout"`
+		WriteTimeout int      `yaml:"write_timeout"`
+		PoolSize     int      `yaml:"pool_size"`
+		PoolTimeout  int      `yaml:"pool_timeout"`
+		IdleTimeout  int      `yaml:"idle_timeout"`
+		Type         string   `yaml:"type"`
+		Tls          bool     `yaml:"tls"`
 	}
 
 	// A RedisKeyConf is a redis config with key.

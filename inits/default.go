@@ -2,7 +2,13 @@ package inits
 
 import (
 	"fmt"
-	"github.com/BurntSushi/toml"
+	"io/ioutil"
+	"path/filepath"
+	"strings"
+	"sync"
+
+	"gopkg.in/yaml.v3"
+
 	"github.com/lfxnxf/zdy_tools/config"
 	"github.com/lfxnxf/zdy_tools/logging"
 	"github.com/lfxnxf/zdy_tools/resource/kafka"
@@ -13,9 +19,6 @@ import (
 	"github.com/lfxnxf/zdy_tools/trace"
 	"github.com/lfxnxf/zdy_tools/zd_http/server"
 	rpc_client "github.com/lfxnxf/zdy_tools/zd_rpc/client"
-	"path/filepath"
-	"strings"
-	"sync"
 )
 
 const (
@@ -58,9 +61,25 @@ func Once() Option {
 	}
 }
 
-func ConfigInstance(configInstance config.Instance) Option {
+func LoadLocalConfig(c config.Instance) Option {
 	return func(d *Default) {
-		d.configInstance = configInstance
+		if len(d.configPath) == 0 {
+			return
+		}
+		b, err := ioutil.ReadFile(d.configPath)
+		if err != nil {
+			panic(err)
+		}
+		err = yaml.Unmarshal(b, c)
+		if err != nil {
+			panic(err)
+		}
+
+		err = yaml.Unmarshal(b, &d.config)
+		if err != nil {
+			panic(err)
+		}
+		c.SetBase(d.config)
 	}
 }
 
@@ -73,10 +92,6 @@ func (d *Default) Start(opts ...Option) {
 		opt(d)
 	}
 	// config
-	err := d.loadLocalConfig()
-	if err != nil {
-		panic(err)
-	}
 
 	d.once.Do(func() {
 		// log
@@ -124,16 +139,22 @@ func (d *Default) Start(opts ...Option) {
 	})
 }
 
-func (d *Default) loadLocalConfig() error {
-	if len(d.configPath) == 0 {
-		return nil
-	}
-	if _, err := toml.DecodeFile(d.configPath, d.configInstance); err != nil {
-		panic(err)
-	}
-	d.config = d.configInstance.GetBase()
-	return nil
-}
+//func LoadLocalConfig(c config.Instance) error {
+//	if len(_default.configPath) == 0 {
+//		return nil
+//	}
+//	yamlFile, err := os.OpenFile(_default.configPath, os.O_RDONLY, 0600)
+//	if err != nil {
+//		panic(err)
+//	}
+//	err = yaml.NewDecoder(yamlFile).Decode(&c)
+//	if err != nil {
+//		panic(err)
+//	}
+//
+//	_default.config = c.GetBase()
+//	return nil
+//}
 
 func (d *Default) initLogger() {
 	if len(d.config.Log.LogPath) == 0 {

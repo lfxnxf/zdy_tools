@@ -54,7 +54,7 @@ some_key_NAME = "wat"
 
 ```go
 type TOML struct {
-    ObscureKey string `toml:"some_key_NAME"`
+    ObscureKey string `yaml:"some_key_NAME"`
 }
 ```
 

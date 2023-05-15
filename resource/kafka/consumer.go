@@ -2,27 +2,29 @@ package kafka
 
 import (
 	"context"
-	"github.com/Shopify/sarama"
-	"github.com/lfxnxf/zdy_tools/resource/kafka/core/config"
-	"github.com/lfxnxf/zdy_tools/resource/kafka/core/consumergroup"
-	"github.com/lfxnxf/zdy_tools/tpc/inf/go-tls"
 	"os"
 	"strings"
 	"sync"
 	"time"
+
+	"github.com/Shopify/sarama"
+
+	"github.com/lfxnxf/zdy_tools/resource/kafka/core/config"
+	"github.com/lfxnxf/zdy_tools/resource/kafka/core/consumergroup"
+	"github.com/lfxnxf/zdy_tools/tpc/inf/go-tls"
 )
 
 type ConsumeConfig struct {
-	ConsumeFrom    string `toml:"consume_from"`
-	KafkaBroken    string `toml:"kafka_broken"`
-	Topic          string `toml:"topic"`
-	Group          string `toml:"group"`
-	InitOffset     int64  `toml:"init_offset"`
-	ProcessTimeout int    `toml:"process_timeout"`
-	CommitInterval int    `toml:"commit_interval"`
-	GetError       bool   `toml:"get_error"`
-	TraceEnable    bool   `toml:"trace_enable"`
-	ConsumeAll     bool   `toml:"consume_all"`
+	ConsumeFrom    string `yaml:"consume_from"`
+	KafkaBroken    string `yaml:"kafka_broken"`
+	Topic          string `yaml:"topic"`
+	Group          string `yaml:"group"`
+	InitOffset     int64  `yaml:"init_offset"`
+	ProcessTimeout int    `yaml:"process_timeout"`
+	CommitInterval int    `yaml:"commit_interval"`
+	GetError       bool   `yaml:"get_error"`
+	TraceEnable    bool   `yaml:"trace_enable"`
+	ConsumeAll     bool   `yaml:"consume_all"`
 }
 
 type ConsumeClient struct {

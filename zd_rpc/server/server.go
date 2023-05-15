@@ -2,10 +2,12 @@ package rpc_server
 
 import (
 	"fmt"
-	grpc_middleware "github.com/grpc-ecosystem/go-grpc-middleware"
-	"github.com/lfxnxf/zdy_tools/zd_rpc/middleware"
-	"google.golang.org/grpc"
 	"net"
+
+	grpc_middleware "github.com/grpc-ecosystem/go-grpc-middleware"
+	"google.golang.org/grpc"
+
+	"github.com/lfxnxf/zdy_tools/zd_rpc/middleware"
 )
 
 type register func(server *grpc.Server)
@@ -17,8 +19,8 @@ type RpcServer struct {
 }
 
 type RpcServerConfig struct {
-	ServiceName string `toml:"service_name"`
-	Port        int64  `toml:"port"`
+	ServiceName string `yaml:"service_name"`
+	Port        int64  `yaml:"port"`
 }
 
 func NewRpcServer(conf RpcServerConfig, register register) *RpcServer {

@@ -502,9 +502,9 @@ V1 used to provide multiple struct tags: `comment`, `commented`, `multiline`,
 ```go
 type doc struct {
 	// v1
-	F string `toml:"field" multiline:"true" omitempty:"true"`
+	F string `yaml:"field" multiline:"true" omitempty:"true"`
 	// v2
-	F string `toml:"field,multiline,omitempty"`
+	F string `yaml:"field,multiline,omitempty"`
 }
 ```
 

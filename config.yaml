@@ -1,0 +1,73 @@
+test: test
+server:
+  service_name: resource-center
+  port: 8080
+  https-port: 8443
+  crt: "./ssl/tls.crt"
+  key: "./ssl/tls.key"
+
+log:
+  rotate: day
+  storage_day: 7
+  level: info
+
+logs:
+  # 日志等级(-1:Debug, 0:Info, 1:Warn, 2:Error, 3:DPanic, 4:Panic, 5:Fatal, -1<=level<=5, 参照zap.level源码)
+  level: -1
+  # 日志路径
+  path: logs
+  # 文件最大大小, M
+  max-size: 50
+  # 备份数
+  max-backups: 100
+  # 存放时间, 天
+  max-age: 30
+  # 是否压缩
+  compress: false
+
+mysql:
+  - name: recourse-center.mysql
+    master: root:ccos@123!@tcp(10.255.183.132:32170)/resourcecenter?parseTime=true&loc=Local&readTimeout=10s&max_idle=500&max_active=100&max_lifetime_sec=14400&charset=utf8mb4&collation=utf8mb4_unicode_ci
+    slave:
+      - root:ccos@123!@tcp(10.255.183.132:32170)/resourcecenter?parseTime=true&loc=Local&readTimeout=10s&max_idle=500&max_active=100&max_lifetime_sec=14400&charset=utf8mb4&collation=utf8mb4_unicode_ci
+
+redis:
+  - name: recourse-center.redis
+    host: 10.255.183.134:30079
+    pass: 123
+    max_idle: 1000
+    database: 0
+    max_retries: 3
+    dial_timeout: 1000
+    idle_timeout: 1000
+    read_timeout: 5000
+    write_timeout: 5000
+
+remote:
+  account:
+    url: http://10.255.183.132:30720 #对应svc
+    get-tenant-by-user: /inner/account/tenant/list/by-user
+    get-tenant-by-id: /inner/account/tenant/info/by-id
+    get-department-by-org: /inner/account/department/tenant/list
+    get-department-by-user: /inner/account/department/user/list
+    get-department-by-id: /inner/account/department/info
+    get-sub-departments: /inner/account/department/current/list
+  price-manage:
+    url: http://10.255.183.132:30047
+    get-service-by-code: /api/inner/service/queryServiceDisplayNames
+    get-resources-by-service-code: /api/inner/service/queryResourceDisplayNames
+    get-catalogs: /api/inner/catalog/queryCatalogServiceResourceList
+  resource-group:
+    url: http://10.255.183.132:30720 #对应svc
+    get-resource-group-by-department-id: /inner/account/resource-group/list-by-department-id
+    get-resource-group-name-by-id: /inner/account/resource-group/get-name-by-id
+  order:
+    url: http://10.253.57.209:32615
+    transfer_order_create: /api/res-life-cycle/v1/transfer/function/create
+    transfer_order_callback: /api/res-life-cycle/v1/transfer/function/callback
+mq:
+# cmq-kafka-sgfdgdfgsdfgsdf-0-0-0.cmq-kafka-sgfdgdfgsdfgsdf-kafka.kafka-instance.svc.cluster.local:9092
+# rc-resource
+  resource-host: cmq-kafka-sgfdgdfgsdfgsdf-0-0-0.cmq-kafka-sgfdgdfgsdfgsdf-kafka.kafka-instance.svc.cluster.local:9092
+  resource-topic: rc-resource
+  price-resource-topic: resource-center-price

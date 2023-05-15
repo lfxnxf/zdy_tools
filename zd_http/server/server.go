@@ -3,14 +3,16 @@ package server
 import (
 	"context"
 	"fmt"
+	"net/http"
+	"time"
+
 	"github.com/gin-contrib/pprof"
 	"github.com/gin-gonic/gin"
+	"go.uber.org/zap"
+
 	"github.com/lfxnxf/zdy_tools/logging"
 	"github.com/lfxnxf/zdy_tools/zd_http/http_ctx"
 	"github.com/lfxnxf/zdy_tools/zd_http/middleware"
-	"go.uber.org/zap"
-	"net/http"
-	"time"
 )
 
 const (
@@ -20,12 +22,12 @@ const (
 )
 
 type HttpServerConfig struct {
-	ServiceName string `toml:"service_name"`
-	Port        int64  `toml:"port"`
-	Mode        string `toml:"mode"`
-	HttpsPort   int64  `toml:"https_port"`
-	Crt         string `toml:"crt"`
-	Key         string `toml:"key"`
+	ServiceName string `yaml:"service_name"`
+	Port        int64  `yaml:"port"`
+	Mode        string `yaml:"mode"`
+	HttpsPort   int64  `yaml:"https_port"`
+	Crt         string `yaml:"crt"`
+	Key         string `yaml:"key"`
 }
 
 type HttpServer struct {

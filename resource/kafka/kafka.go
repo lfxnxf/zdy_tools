@@ -4,12 +4,13 @@ import (
 	"bytes"
 	"errors"
 	"fmt"
-	log "github.com/lfxnxf/zdy_tools/logging"
 	"io/ioutil"
 	stdlog "log"
 	"strings"
 	"sync"
 	"time"
+
+	log "github.com/lfxnxf/zdy_tools/logging"
 
 	"github.com/Shopify/sarama"
 	"github.com/samuel/go-zookeeper/zk"
@@ -49,15 +50,15 @@ var (
 )
 
 type ProducerConfig struct {
-	ProducerTo     string `toml:"producer_to"`
-	Broken         string `toml:"kafka_broken"`
-	RetryMax       int    `toml:"retry_max"`
-	RequiredAcks   string `toml:"required_acks"`
-	GetError       bool   `toml:"get_error"`
-	GetSuccess     bool   `toml:"get_success"`
-	RequestTimeout int    `toml:"request_timeout"`
-	Printf         bool   `toml:"printf"`
-	UseSync        bool   `toml:"use_sync"`
+	ProducerTo     string `yaml:"producer_to"`
+	Broken         string `yaml:"kafka_broken"`
+	RetryMax       int    `yaml:"retry_max"`
+	RequiredAcks   string `yaml:"required_acks"`
+	GetError       bool   `yaml:"get_error"`
+	GetSuccess     bool   `yaml:"get_success"`
+	RequestTimeout int    `yaml:"request_timeout"`
+	Printf         bool   `yaml:"printf"`
+	UseSync        bool   `yaml:"use_sync"`
 }
 
 type Client struct {
