@@ -56,7 +56,7 @@ func NewEncoder(w io.Writer) *Encoder {
 // This behavior can be controlled on an individual struct field basis with the
 // inline tag:
 //
-//	MyField `yaml:",inline"`
+//	MyField `toml:",inline"`
 func (enc *Encoder) SetTablesInline(inline bool) *Encoder {
 	enc.tablesInline = inline
 	return enc

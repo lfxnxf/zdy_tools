@@ -2,13 +2,17 @@ package sql
 
 import (
 	"fmt"
-	mysql "github.com/go-sql-driver/mysql"
-	"github.com/jinzhu/gorm"
-	log "github.com/lfxnxf/zdy_tools/logging"
-	"github.com/lfxnxf/zdy_tools/resource/sql/trace"
 	"strconv"
 	"sync/atomic"
 	"time"
+
+	"github.com/go-sql-driver/mysql"
+	gormmysql "gorm.io/driver/mysql"
+	"gorm.io/gorm"
+	"gorm.io/gorm/logger"
+	"gorm.io/gorm/schema"
+
+	log "github.com/lfxnxf/zdy_tools/logging"
 )
 
 // Client继承了*gorm.DB的所有方法, 详细的使用方法请参考:
@@ -62,16 +66,29 @@ func openDB(name, address string, isMaster int, statLevel, format, logLevel stri
 	if err != nil {
 		return nil, err
 	}
-	db, err := trace.Open(addr, name)
+	l := logger.New(
+		//设置Logger
+		newGlobalLogger(statLevel, isMaster, parseDbName(address), format, logLevel),
+		logger.Config{
+			LogLevel: logger.Info,
+		},
+	)
+	db, err := gorm.Open(gormmysql.Open(addr), &gorm.Config{
+		DisableForeignKeyConstraintWhenMigrating: true,
+		SkipDefaultTransaction:                   true,
+		PrepareStmt:                              true, //创建并缓存预编译语句
+		Logger:                                   l,
+		NamingStrategy: schema.NamingStrategy{
+			SingularTable: true, // 使用单数表名
+		},
+	})
 	if err != nil {
 		return nil, fmt.Errorf("open mysql [%s] master %s error %s", name, address, err)
 	}
-	db = db.Debug()
-	db = db.BlockGlobalUpdate(true)
-	db.SetLogger(newGlobalLogger(statLevel, isMaster, parseDbName(address), format, logLevel))
-	db.DB().SetMaxIdleConns(maxIdle)
-	db.DB().SetMaxOpenConns(maxActive)
-	db.DB().SetConnMaxLifetime(time.Duration(lifetime) * time.Second)
+	sql, _ := db.DB()
+	sql.SetMaxIdleConns(maxIdle)
+	sql.SetMaxOpenConns(maxActive)
+	sql.SetConnMaxLifetime(time.Duration(lifetime) * time.Second)
 
 	return &Client{DB: db}, err
 }

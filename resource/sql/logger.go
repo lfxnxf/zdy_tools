@@ -4,15 +4,19 @@ import (
 	"database/sql/driver"
 	"errors"
 	"fmt"
-	log "github.com/lfxnxf/zdy_tools/logging"
-	"github.com/lfxnxf/zdy_tools/tpc/inf/go-tls"
-	"github.com/lfxnxf/zdy_tools/tpc/inf/metrics"
+	log2 "log"
 	"reflect"
 	"regexp"
 	"strings"
 	"sync"
 	"time"
 	"unicode"
+
+	"gorm.io/gorm/logger"
+
+	log "github.com/lfxnxf/zdy_tools/logging"
+	"github.com/lfxnxf/zdy_tools/tpc/inf/go-tls"
+	"github.com/lfxnxf/zdy_tools/tpc/inf/metrics"
 
 	"github.com/go-sql-driver/mysql"
 	"github.com/xwb1989/sqlparser"
@@ -27,7 +31,7 @@ var (
 	sqlGlobalLogger = &GlobalLogger{print: log.Info}
 )
 
-func newGlobalLogger(statLevel string, isMaster int, database, format, logLevel string) *GlobalLogger {
+func newGlobalLogger(statLevel string, isMaster int, database, format, logLevel string) logger.Writer {
 	var isDebug bool
 	switch strings.ToLower(logLevel) {
 	case "debug", "info", "":
@@ -285,6 +289,20 @@ func (l *GlobalLogger) logFormatter(values ...interface{}) (messages []interface
 	return
 }
 
+func (l *GlobalLogger) logFormatterV2(format string, values ...interface{}) (messages []interface{}) {
+	if len(values) >= 3 {
+		info := SqlInfo{
+			FileWithLine: l.TrimmedPath(fmt.Sprintf("%s", values[0]), 3),
+		}
+		info.Sql, _ = values[3].(string)
+		info.Rows, _ = values[2].(int64)
+		info.Duration, _ = values[1].(float64)
+		info.SetCustomFormat(l.LogFormat)
+		messages = []interface{}{info.Output()}
+	}
+	return
+}
+
 type GlobalLogger struct {
 	mu        sync.RWMutex
 	print     func(...interface{})
@@ -303,6 +321,31 @@ func (l *GlobalLogger) Print(message ...interface{}) {
 		}
 	}
 	message = l.logFormatter(message...)
+	if len(message) >= 1 && l.print != nil {
+		if strings.Contains(strings.ToLower(message[len(message)-1].(string)), "error") {
+			// error日志打印
+			log.Error(message...)
+			return
+		}
+		l.mu.RLock()
+		f := l.print
+		l.mu.RUnlock()
+		if f != nil && l.isDebug {
+			// debug & info 日志打印
+			f(message...)
+		}
+	}
+}
+
+func (l *GlobalLogger) Printf(msg string, v ...interface{}) {
+	if len(v) <= 0 {
+		return
+	}
+
+	// 控制台也打印s
+	log2.Printf(msg, v...)
+
+	message := l.logFormatterV2(msg, v...)
 	if len(message) >= 1 && l.print != nil {
 		if strings.Contains(strings.ToLower(message[len(message)-1].(string)), "error") {
 			// error日志打印

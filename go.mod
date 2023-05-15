@@ -3,7 +3,6 @@ module github.com/lfxnxf/zdy_tools
 go 1.17
 
 require (
-	github.com/BurntSushi/toml v1.2.1
 	github.com/Shopify/sarama v1.38.1
 	github.com/cenk/backoff v2.2.1+incompatible
 	github.com/facebookgo/clock v0.0.0-20150410010913-600d898af40a
@@ -16,7 +15,6 @@ require (
 	github.com/google/uuid v1.3.0
 	github.com/grpc-ecosystem/go-grpc-middleware v1.4.0
 	github.com/hashicorp/consul/api v1.20.0
-	github.com/jinzhu/gorm v1.9.16
 	github.com/json-iterator/go v1.1.12
 	github.com/magiconair/properties v1.8.7
 	github.com/natefinch/lumberjack v2.0.0+incompatible
@@ -42,9 +40,13 @@ require (
 	google.golang.org/grpc v1.55.0
 	google.golang.org/protobuf v1.30.0
 	gopkg.in/yaml.v2 v2.4.0
+	gopkg.in/yaml.v3 v3.0.1
+	gorm.io/driver/mysql v1.5.0
+	gorm.io/gorm v1.25.1
 )
 
 require (
+	github.com/BurntSushi/toml v1.2.1 // indirect
 	github.com/andres-erbsen/clock v0.0.0-20160526145045-9e14626cd129 // indirect
 	github.com/armon/go-metrics v0.0.0-20180917152333-f0300d1749da // indirect
 	github.com/bytedance/sonic v1.8.0 // indirect
@@ -80,6 +82,7 @@ require (
 	github.com/jcmturner/gokrb5/v8 v8.4.3 // indirect
 	github.com/jcmturner/rpc/v2 v2.0.3 // indirect
 	github.com/jinzhu/inflection v1.0.0 // indirect
+	github.com/jinzhu/now v1.1.5 // indirect
 	github.com/klauspost/compress v1.15.14 // indirect
 	github.com/klauspost/cpuid/v2 v2.0.9 // indirect
 	github.com/leodido/go-urn v1.2.1 // indirect
@@ -103,5 +106,4 @@ require (
 	golang.org/x/text v0.9.0 // indirect
 	google.golang.org/genproto v0.0.0-20230306155012-7f2fa6fef1f4 // indirect
 	gopkg.in/natefinch/lumberjack.v2 v2.2.1 // indirect
-	gopkg.in/yaml.v3 v3.0.1 // indirect
 )
