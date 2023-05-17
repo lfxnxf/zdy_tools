@@ -2,19 +2,21 @@ package zd_http
 
 import (
 	"fmt"
-	"github.com/gin-gonic/gin"
-	"github.com/go-playground/validator/v10"
-	"github.com/lfxnxf/zdy_tools/trace"
-	"github.com/lfxnxf/zdy_tools/zd_error"
 	"net/http"
 	"reflect"
+
+	"github.com/gin-gonic/gin"
+	"github.com/go-playground/validator/v10"
+
+	"github.com/lfxnxf/zdy_tools/trace"
+	"github.com/lfxnxf/zdy_tools/zd_error"
 )
 
 type WrapResp struct {
 	Code      string      `json:"code"`
 	Msg       string      `json:"message"`
 	Data      interface{} `json:"data"`
-	RequestId string      `json:"request_id"`
+	RequestId string      `json:"requestId"`
 }
 
 func newWrapResp(data interface{}, err error, traceId string) WrapResp {

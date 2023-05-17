@@ -138,7 +138,7 @@ func String(e string) Code {
 // Cause cause from error to ecode.
 func Cause(e error) Codes {
 	if e == nil {
-		return String("")
+		return Success
 	}
 	ec, ok := errors.Cause(e).(Codes)
 	if ok {
