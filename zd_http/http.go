@@ -31,7 +31,7 @@ func newWrapResp(data interface{}, err error, traceId string) WrapResp {
 
 func WriteJson(c *gin.Context, data interface{}, err error) {
 	w := newWrapResp(data, err, trace.ExtraTraceID(c))
-	if len(w.Code) > 0 {
+	if w.Code != "Success" {
 		c.JSON(http.StatusInternalServerError, w)
 	} else {
 		c.JSON(http.StatusOK, w)
