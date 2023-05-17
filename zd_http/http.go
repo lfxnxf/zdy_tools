@@ -31,12 +31,8 @@ func newWrapResp(data interface{}, err error, traceId string) WrapResp {
 
 func WriteJson(c *gin.Context, data interface{}, err error) {
 	w := newWrapResp(data, err, trace.ExtraTraceID(c))
-	if w.Code != "Success" {
-		c.JSON(http.StatusInternalServerError, w)
-	} else {
-		c.JSON(http.StatusOK, w)
-	}
-	//c.JSON(http.StatusOK, w)
+	// 所有都返回200
+	c.JSON(http.StatusOK, w)
 	c.Abort()
 }
 
